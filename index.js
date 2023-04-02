@@ -1,5 +1,8 @@
 const inquirer = require('inquirer')
 const fs = require('fs')
+const SVG = require('svg.js')
+
+const shapes = ['circle', 'triangle', 'square']
 
 function askQuestions(){
 inquirer 
@@ -26,11 +29,16 @@ inquirer
     message: 'Please enter a color name or hex value for the text',
 }
 ])
+
 .then((data) => {
     console.log(data)
     
 })
 
-}
+//create a new SVG document
+const svg = SVG().size(300, 200)
 
-askQuestions()
+//saving the SVG to a file
+fs.writeFileSync(`$filename}.svg`, svg.svg())
+
+}
