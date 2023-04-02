@@ -11,9 +11,20 @@ inquirer
 }, 
 {
     type: 'input', 
-    name: 'color',
-    message: 'please enter a color name or hex value',
+    name: 'text-color',
+    message: 'Please enter a color name or hex value for the text',
 },
+{
+    type: 'list',
+    name: 'shape',
+    message: 'Please select from a list of shapes: circle, triangle and square',
+    choices: ['circle', 'triangle', 'square'],
+},
+{
+    type: 'input',
+    name: 'shape-color',
+    message: 'Please enter a color name or hex value for the text',
+}
 ])
 .then((data) => {
     console.log(data)
