@@ -1,6 +1,6 @@
 const inquirer = require('inquirer')
 const fs = require('fs')
-const SVG = require('svg.js')
+const { circle, triangle, square } = require('./lib/shapes')
 
 const shapes = ['circle', 'triangle', 'square']
 
@@ -32,39 +32,66 @@ inquirer
 .then((data) => {
     const text = data['text']
     const textColor = data['text-color']
-    const shape = data['shape']
+    const shapeType = data['shape']
     const shapeColor = data['shape-color']
     const filename = data['filename']
 
-    //create a new SVG document
-    const svg = SVG().size(300, 200)
+    //add create svg document
+    const svg = createsSVGDocument()
+    
+    //add text to the SVG
+    addTextToSVG(svg, text, textColor)
 
-    //add text to the file
-    svg.text(text).fill(textColor).move(50,100)
-
-    //add shapes
-    switch (shape){
-        case 'circle':
-            svg.circle(50).fill(shapeColor).move(200, 100);
-            break;
-          case 'triangle':
-            svg.polygon('0,50 50,0 100,50').fill(shapeColor).move(175, 75);
-            break;
-          case 'square':
-            svg.rect(50, 50).fill(shapeColor).move(175, 75);
-            break;
-          default:
-            console.error('Invalid shape:', shape);
-            process.exit(1); 
-    }
-
+    //add the chosen shape to the SVG
+    addShapetoSVG(svg, shapeType, shapeColor)
+   
     //saving the SVG to a file
-    fs.writeFileSync(`${filename}.svg`, svg.svg())
+    saveSVGToFile(svg, filename)
 
     console.log(`Logo saved to ${filename}.svg`)
 })
+}
 
+function createsSVGDocument(){
+    return '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n' +
+    '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="300" height="200">\n' +
+    '</svg>\n'
+}
 
+function addTextToSVG(svg, text, color){
+    const svgArray = svg.split('\n')
+    svgArray.splice(2, 0, ` <text x="50" y="100" font-size="48" fill="${color}">${text}</text>\n`)
+    const newSVG = svgArray.join('\n')
+    return newSVG
+}
+
+function addShapetoSVG(svg, shapeType, color){
+    let shape
+
+    switch (shapeType) {
+    case 'circle':
+      shape = new circle();
+      break;
+    case 'triangle':
+      shape = new triangle();
+      break;
+    case 'square':
+      shape = new square();
+      break;
+    default:
+      console.error('Invalid shape:', shapeType);
+      process.exit(1);
+    }
+
+    shape.pickColor(color)
+    const svgArray = svg.split('\n')
+    svgArray.splice(-2, 0, ` ${shape['render' + shapeType.charAt(0).toUpperCase() + shapeType.slice(1)]()}\n`)
+    const newSVG = svgArray.join('\n')
+    return newSVG
+}
+
+function saveSVGToFile(svg, filename) {
+    fs.writeFileSync(`${filename}.svg`, svg)
 }
 
 askQuestions()
