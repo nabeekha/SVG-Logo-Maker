@@ -1,9 +1,12 @@
+//intial variable declaration
 const inquirer = require('inquirer')
 const fs = require('fs')
 const { circle, triangle, square } = require('./lib/shapes')
 
+//declaring first shape arraay
 const shapes = ['circle', 'triangle', 'square']
 
+//writing questions
 function askQuestions(){
 inquirer 
     .prompt([
