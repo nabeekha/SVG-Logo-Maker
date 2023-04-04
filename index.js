@@ -51,7 +51,7 @@ inquirer
     //saving the SVG to a file
     saveSVGToFile(svg, filename)
 
-    console.log(`Logo saved to ${filename}.svg`)
+    console.log(`Generated logo to ${filename}.svg`)
 })
 }
 
